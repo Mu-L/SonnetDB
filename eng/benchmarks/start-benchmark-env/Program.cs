@@ -4,7 +4,7 @@ return await BenchmarkEnvironmentScript.RunAsync(args);
 
 static class BenchmarkEnvironmentScript
 {
-    private static readonly string[] ContainerNames =
+    private static readonly string[] _containerNames =
     [
         "tslite-bench-server",
         "tslite-bench-influxdb",
@@ -128,7 +128,7 @@ static class BenchmarkEnvironmentScript
         while (true)
         {
             var statuses = new List<ContainerStatus>();
-            foreach (var containerName in ContainerNames)
+            foreach (var containerName in _containerNames)
             {
                 statuses.Add(new ContainerStatus(containerName, await GetContainerStatusAsync(containerName, workingDirectory)));
             }

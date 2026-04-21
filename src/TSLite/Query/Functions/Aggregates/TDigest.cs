@@ -20,23 +20,23 @@ namespace TSLite.Query.Functions.Aggregates;
 /// </summary>
 internal sealed class TDigest
 {
-    private const int DefaultCompression = 100;
-    private const int BufferFactor = 5;
+    private const int _defaultCompression = 100;
+    private const int _bufferFactor = 5;
 
     private readonly int _compression;
     private readonly List<Centroid> _centroids;
     private readonly List<Centroid> _buffer;
     private readonly int _bufferLimit;
 
-    public TDigest(int compression = DefaultCompression)
+    public TDigest(int compression = _defaultCompression)
     {
         if (compression < 10)
             throw new ArgumentOutOfRangeException(nameof(compression), "压缩参数必须 ≥ 10。");
 
         _compression = compression;
         _centroids = new List<Centroid>(compression * 2);
-        _buffer = new List<Centroid>(compression * BufferFactor);
-        _bufferLimit = compression * BufferFactor;
+        _buffer = new List<Centroid>(compression * _bufferFactor);
+        _bufferLimit = compression * _bufferFactor;
     }
 
     /// <summary>已累加的样本数（等价于所有 centroid 权重之和）。</summary>

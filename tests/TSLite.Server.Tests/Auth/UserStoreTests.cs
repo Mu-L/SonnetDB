@@ -258,12 +258,13 @@ public sealed class UserStoreTests : IDisposable
         var issuers = Enumerable.Range(0, 4).Select(__ => Task.Run(() =>
         {
             var locals = new List<string>();
-            while (!cts.Token.IsCancellationRequested)
+            // 使用 do-while 确保至少颁发一个 token，避免在 CancellationToken
+            // 首次检查前已取消时导致空列表。
+            do
             {
                 var (t, _) = store.IssueToken("alice");
                 locals.Add(t);
-                if (locals.Count > 50) break;
-            }
+            } while (!cts.Token.IsCancellationRequested && locals.Count <= 50);
             return locals;
         })).ToArray();
 

@@ -20,15 +20,15 @@ internal sealed class HyperLogLog
     public const int Precision = 14;
     public const int RegisterCount = 1 << Precision; // 16384
 
-    private const int RemainingBits = 64 - Precision;
-    private const double AlphaMM = 0.7213 / (1.0 + 1.079 / RegisterCount) * RegisterCount * RegisterCount;
+    private const int _remainingBits = 64 - Precision;
+    private const double _alphaMm = 0.7213 / (1.0 + 1.079 / RegisterCount) * RegisterCount * RegisterCount;
 
     private readonly byte[] _registers = new byte[RegisterCount];
 
     /// <summary>用 64 位 hash 累加。</summary>
     public void AddHash(ulong hash)
     {
-        int index = (int)(hash >> RemainingBits);
+        int index = (int)(hash >> _remainingBits);
         ulong remaining = (hash << Precision) | (1UL << (Precision - 1));
         // remaining 一定非零；前导零数 + 1
         byte rank = (byte)(System.Numerics.BitOperations.LeadingZeroCount(remaining) + 1);
@@ -88,7 +88,7 @@ internal sealed class HyperLogLog
             if (r == 0) zeros++;
         }
 
-        double estimate = AlphaMM / sum;
+        double estimate = _alphaMm / sum;
 
         // 小基数线性计数修正：当 estimate ≤ 2.5m 且存在空寄存器时使用 m * ln(m / V)。
         if (estimate <= 2.5 * RegisterCount && zeros > 0)

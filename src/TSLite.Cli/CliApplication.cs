@@ -49,10 +49,10 @@ internal sealed class CliApplication
 
             return command.ToLowerInvariant() switch
             {
-                "sql"     => RunSql(args),
-                "repl"    => RunRepl(args),
-                "local"   => RunLocal(args),
-                "remote"  => RunRemote(args),
+                "sql" => RunSql(args),
+                "repl" => RunRepl(args),
+                "local" => RunLocal(args),
+                "remote" => RunRemote(args),
                 "connect" => RunConnect(args),
                 _ => FailParse($"未知命令 '{command}'。"),
             };
@@ -92,8 +92,8 @@ internal sealed class CliApplication
         var options = ParseLocalOptions(args);
         return options.Action switch
         {
-            LocalAction.Use    => RunLocalUse(options),
-            LocalAction.List   => RunLocalList(),
+            LocalAction.Use => RunLocalUse(options),
+            LocalAction.List => RunLocalList(),
             LocalAction.Remove => RunLocalRemove(options),
             _ => throw new InvalidOperationException("未知的本地命令动作。"),
         };
@@ -118,7 +118,7 @@ internal sealed class CliApplication
         return options.Mode switch
         {
             ExecMode.Info => WriteConnectionInfo(connectionString),
-            ExecMode.Sql  => ExecuteSqlCommand(connectionString, options.SqlText!),
+            ExecMode.Sql => ExecuteSqlCommand(connectionString, options.SqlText!),
             ExecMode.Repl => RunRepl(connectionString),
             _ => throw new InvalidOperationException("未知的执行模式。"),
         };
@@ -189,8 +189,8 @@ internal sealed class CliApplication
         var options = ParseRemoteOptions(args);
         return options.Action switch
         {
-            RemoteAction.Use    => RunRemoteUse(options),
-            RemoteAction.List   => RunRemoteList(),
+            RemoteAction.Use => RunRemoteUse(options),
+            RemoteAction.List => RunRemoteList(),
             RemoteAction.Remove => RunRemoteRemove(options),
             _ => throw new InvalidOperationException("未知的远程命令动作。"),
         };
@@ -222,7 +222,7 @@ internal sealed class CliApplication
         return resolved.Mode switch
         {
             ExecMode.Info => WriteConnectionInfo(connectionString),
-            ExecMode.Sql  => ExecuteSqlCommand(connectionString, resolved.SqlText!),
+            ExecMode.Sql => ExecuteSqlCommand(connectionString, resolved.SqlText!),
             ExecMode.Repl => RunRepl(connectionString),
             _ => throw new InvalidOperationException("未知的执行模式。"),
         };
@@ -278,10 +278,10 @@ internal sealed class CliApplication
             profile = remote;
         }
 
-        var baseUrl  = options.BaseUrl  ?? profile?.BaseUrl;
+        var baseUrl = options.BaseUrl ?? profile?.BaseUrl;
         var database = options.Database ?? profile?.Database;
-        var token    = options.Token    ?? profile?.Token;
-        var timeout  = options.Timeout  ?? profile?.Timeout ?? 100;
+        var token = options.Token ?? profile?.Token;
+        var timeout = options.Timeout ?? profile?.Timeout ?? 100;
 
         if (string.IsNullOrWhiteSpace(baseUrl))
             throw new CliUsageException("必须通过 --url 指定 TSLite.Server 地址，或通过 --profile / 默认 profile 提供。");
@@ -324,7 +324,7 @@ internal sealed class CliApplication
         return options.Mode switch
         {
             ExecMode.Info => WriteConnectionInfo(connectionString),
-            ExecMode.Sql  => ExecuteSqlCommand(connectionString, options.SqlText!),
+            ExecMode.Sql => ExecuteSqlCommand(connectionString, options.SqlText!),
             ExecMode.Repl => RunRepl(connectionString),
             _ => throw new InvalidOperationException("未知的执行模式。"),
         };
@@ -838,8 +838,8 @@ internal readonly record struct ConnectOptions(
 
 // ── Enums ─────────────────────────────────────────────────────────────────────
 
-internal enum ExecMode  { Info, Sql, Repl }
-internal enum LocalAction  { Use, List, Remove }
+internal enum ExecMode { Info, Sql, Repl }
+internal enum LocalAction { Use, List, Remove }
 internal enum RemoteAction { Use, List, Remove }
 
 // ── Exceptions / exit codes ───────────────────────────────────────────────────
